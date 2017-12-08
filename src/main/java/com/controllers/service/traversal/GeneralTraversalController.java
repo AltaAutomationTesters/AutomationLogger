@@ -35,14 +35,14 @@ import com.util.FileUtils;
 public class GeneralTraversalController {
 
 	String fileName = getCurrentTimeStamp();
-	
+
 	@RequestMapping(value = { "login" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView login(Map<String, Object> model) throws IOException {
 		ModelAndView mav = new ModelAndView("login");
 		return mav;
 	}
 
-	@RequestMapping(value = { "terminal" }, method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = { "terminal", "" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView terminal(Map<String, Object> model) throws IOException {
 		ModelAndView mav = new ModelAndView("terminal");
 		return mav;
@@ -71,33 +71,29 @@ public class GeneralTraversalController {
 	}
 
 	// 20:46:18 IST|INFO |
-	
+
 	@RequestMapping(value = "logger.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public void logger(HttpEntity<String> httpEntity) {
-		String line = getCurrentTimeStamp()+" "+"IST"+"|"+"INFO"+" "+"|"+" "+ httpEntity.getBody();
-		
-		System.out.println("=========== : "+CurrentTimeBeans.getInstance().getCurrentTime());
-		
-		if(CurrentTimeBeans.getInstance().getCurrentTime().equals("00:00")) {
-			if(!(new File("src/main/resources/static/Backup/"+getCurrentTimeStamp()+".txt").exists())) {
-				FileUtils.copyFile(new File("src/main/resources/static/files/logs"), new File("src/main/resources/static/Backup/"+new Date()+".txt"));
+		short counter = 0;
+		String line = getCurrentTimeStamp() + " " + "IST" + "|" + "INFO" + " " + "|" + " " + httpEntity.getBody();
+		if (CurrentTimeBeans.getInstance().getCurrentTime().equals("00:00") && (counter == 0)) {
+			if (!(new File("src/main/resources/static/Backup/" + getCurrentTimeStamp() + ".txt").exists())) {
+				FileUtils.copyFile(new File("src/main/resources/static/files/logs"),
+						new File("src/main/resources/static/Backup/" + new Date() + ".txt"));
 				FileUtils.writeToFile("", "src/main/resources/static/files/logs", false);
 			}
-			
+			counter++;
 		}
-		
 		FileUtils.writeToFile("<br>" + line, "src/main/resources/static/files/logs", true);
 	}
 
 	public String getCurrentTimeStamp() {
-	    return new SimpleDateFormat("HH:mm:ss").format(new Date());
+		return new SimpleDateFormat("HH:mm:ss").format(new Date());
 	}
-	
-	
-	//"yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH
+
+	// "yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH
 	public String getTimeStampFile() {
 		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).format(new Date());
 	}
-	
 
 }
