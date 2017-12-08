@@ -7,7 +7,7 @@ public class CurrentTimeBeans extends Thread {
 
 	
 	static CurrentTimeBeans instance;
-	private String currentTime;
+	 String currentTime1;
 	
 	public static CurrentTimeBeans getInstance() {
 		if(instance == null) {
@@ -17,27 +17,36 @@ public class CurrentTimeBeans extends Thread {
 	}
 	
 	public void setCurrentTime(String currentTime) {
-		currentTime = currentTime;
+		currentTime1 = currentTime;
 	}
 	
 	public String getCurrentTime() {
-		return currentTime;
+		return currentTime1;
 	}
 	
 	public void run() {
-		
-		while (true)
-        {
-            String data = new SimpleDateFormat("HH:mm").format(new Date());
-            setCurrentTime(data);
-            Thread.yield();
-            try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		new Thread() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				super.run();
+				while (true)
+		        {
+		            String data = new SimpleDateFormat("HH:mm").format(new Date());
+		            System.out.println("THREA ===== : "+data);
+		            setCurrentTime(data);
+		            Thread.yield();
+		            try {
+						Thread.sleep(60000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
 			}
-        }
+		}.start();
+		
+		
 		
 		//return new SimpleDateFormat("HH:mm").format(new Date());
 	}

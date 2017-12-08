@@ -9,9 +9,10 @@ import com.controllers.service.entity.CurrentTimeBeans;
 public class AutomationLoggerApplication {
 
 	public static void main(String[] args) {
+		CurrentTimeBeans.getInstance().run();
 		SpringApplication.run(AutomationLoggerApplication.class, args);
 		
-		CurrentTimeBeans.getInstance().run();
+		
 		
 	}
 }

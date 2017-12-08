@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,9 +76,13 @@ public class GeneralTraversalController {
 	public void logger(HttpEntity<String> httpEntity) {
 		String line = getCurrentTimeStamp()+" "+"IST"+"|"+"INFO"+" "+"|"+" "+ httpEntity.getBody();
 		
-		
+		System.out.println("=========== : "+CurrentTimeBeans.getInstance().getCurrentTime());
 		
 		if(CurrentTimeBeans.getInstance().getCurrentTime().equals("00:00")) {
+			if(!(new File("src/main/resources/static/Backup/"+getCurrentTimeStamp()+".txt").exists())) {
+				FileUtils.copyFile(new File("src/main/resources/static/files/logs"), new File("src/main/resources/static/Backup/"+new Date()+".txt"));
+				FileUtils.writeToFile("", "src/main/resources/static/files/logs", false);
+			}
 			
 		}
 		
@@ -88,6 +93,11 @@ public class GeneralTraversalController {
 	    return new SimpleDateFormat("HH:mm:ss").format(new Date());
 	}
 	
+	
+	//"yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH
+	public String getTimeStampFile() {
+		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).format(new Date());
+	}
 	
 
 }
