@@ -10,9 +10,6 @@ public class AutomationLoggerApplication {
 
 	public static void main(String[] args) {
 		CurrentTimeBeans.getInstance().run();
-		SpringApplication.run(AutomationLoggerApplication.class, args);
-		
-		
-		
+		SpringApplication.run(AutomationLoggerApplication.class, args);	
 	}
 }

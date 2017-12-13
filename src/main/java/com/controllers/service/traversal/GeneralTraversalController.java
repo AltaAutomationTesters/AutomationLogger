@@ -2,13 +2,11 @@ package com.controllers.service.traversal;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
@@ -19,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +34,18 @@ import com.util.FileUtils;
 public class GeneralTraversalController {
 
 	String fileName = getCurrentTimeStamp();
+
+	@Scheduled(cron = "* 0 0 * * *")
+	public void resetLogFile() throws IOException {
+		Date date = new Date();
+		File backupFile = new File("src/main/resources/static/backup/"
+				+ (date.getDay() + "-" + date.getMonth() + "-" + date.getYear()) + ".txt");
+		if (!backupFile.exists()) {
+			backupFile.createNewFile();
+			FileUtils.copyFile(new File("src/main/resources/static/files/logs"), backupFile);
+			FileUtils.writeToFile("", "src/main/resources/static/files/logs", false);
+		}
+	}
 
 	@RequestMapping(value = { "login" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView login(Map<String, Object> model) throws IOException {
@@ -70,20 +81,12 @@ public class GeneralTraversalController {
 		return respEntity;
 	}
 
-	// 20:46:18 IST|INFO |
+	
 
 	@RequestMapping(value = "logger.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public void logger(HttpEntity<String> httpEntity) {
-		short counter = 0;
-		String line = getCurrentTimeStamp() + " " + "IST" + "|" + "INFO" + " " + "|" + " " + httpEntity.getBody();
-		if (CurrentTimeBeans.getInstance().getCurrentTime().equals("00:00") && (counter == 0)) {
-			if (!(new File("src/main/resources/static/Backup/" + getCurrentTimeStamp() + ".txt").exists())) {
-				FileUtils.copyFile(new File("src/main/resources/static/files/logs"),
-						new File("src/main/resources/static/Backup/" + new Date() + ".txt"));
-				FileUtils.writeToFile("", "src/main/resources/static/files/logs", false);
-			}
-			counter++;
-		}
+		String line = getCurrentTimeStamp() + " " + (new GregorianCalendar()).getTimeZone().getID() + "|" + "INFO" + " "
+				+ "|" + " <br>" + httpEntity.getBody().replace("\n", "<br>");
 		FileUtils.writeToFile("<br>" + line, "src/main/resources/static/files/logs", true);
 	}
 
