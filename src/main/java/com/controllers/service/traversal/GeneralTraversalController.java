@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -33,8 +34,6 @@ import com.util.FileUtils;
 @RequestMapping(value = "/")
 public class GeneralTraversalController {
 
-	String fileName = getCurrentTimeStamp();
-
 	@Scheduled(cron = "* 0 0 * * *")
 	public void resetLogFile() throws IOException {
 		Date date = new Date();
@@ -59,7 +58,7 @@ public class GeneralTraversalController {
 		return mav;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 	@RequestMapping(value = { "getFile" }, produces = { "application/json" }, method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity getFile(@RequestParam(value = "fileName", required = false) String fileName,
 			HttpServletRequest request) throws IOException {
@@ -81,17 +80,16 @@ public class GeneralTraversalController {
 		return respEntity;
 	}
 
-	
-
 	@RequestMapping(value = "logger.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public void logger(HttpEntity<String> httpEntity) {
-		String line = getCurrentTimeStamp() + " " + (new GregorianCalendar()).getTimeZone().getID() + "|" + "INFO" + " "
-				+ "|" + " <br>" + httpEntity.getBody().replace("\n", "<br>");
+	public void logger(HttpEntity<String> httpEntity, HttpServletRequest request) {
+		String line = getCurrentTimeStamp(request.getLocale()) + " "
+				+ Calendar.getInstance(request.getLocale()).getTimeZone().getID() + "|" + request.getRemoteAddr() + "|"
+				+ "|" + request.getRemoteHost() + "|" + " <br>" + httpEntity.getBody().replace("\n", "<br>");
 		FileUtils.writeToFile("<br>" + line, "src/main/resources/static/files/logs", true);
 	}
 
-	public String getCurrentTimeStamp() {
-		return new SimpleDateFormat("HH:mm:ss").format(new Date());
+	public String getCurrentTimeStamp(Locale locale) {
+		return new SimpleDateFormat("HH:mm:ss", locale).format(new Date());
 	}
 
 	// "yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH
