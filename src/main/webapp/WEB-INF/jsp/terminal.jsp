@@ -21,6 +21,7 @@
 		setInterval(function() {
 			$(".console").load("/getFile?fileName=logs");
 		}, 3000);
+		window.scrollTo(0, document.body.scrollHeight);
 	</script>
 </body>
 </html>

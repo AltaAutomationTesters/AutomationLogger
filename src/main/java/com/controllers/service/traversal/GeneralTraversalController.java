@@ -58,7 +58,7 @@ public class GeneralTraversalController {
 		return mav;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation", "static-access" })
 	@RequestMapping(value = { "getFile" }, produces = { "application/json" }, method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity getFile(@RequestParam(value = "fileName", required = false) String fileName,
 			HttpServletRequest request) throws IOException {
@@ -90,11 +90,6 @@ public class GeneralTraversalController {
 
 	public String getCurrentTimeStamp(Locale locale) {
 		return new SimpleDateFormat("HH:mm:ss", locale).format(new Date());
-	}
-
-	// "yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH
-	public String getTimeStampFile() {
-		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).format(new Date());
 	}
 
 }
