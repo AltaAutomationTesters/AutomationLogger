@@ -20,8 +20,8 @@
 	<script>
 		setInterval(function() {
 			$(".console").load("/getFile?fileName=logs");
+			window.scrollTo(0, document.body.scrollHeight);
 		}, 3000);
-		window.scrollTo(0, document.body.scrollHeight);
 	</script>
 </body>
 </html>

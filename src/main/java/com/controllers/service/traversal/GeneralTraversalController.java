@@ -84,7 +84,7 @@ public class GeneralTraversalController {
 	public void logger(HttpEntity<String> httpEntity, HttpServletRequest request) {
 		String line = getCurrentTimeStamp(request.getLocale()) + " "
 				+ Calendar.getInstance(request.getLocale()).getTimeZone().getID() + "|" + request.getRemoteAddr() + "|"
-				+ "|" + request.getRemoteHost() + "|" + " <br>" + httpEntity.getBody().replace("\n", "<br>");
+				+ " <br>" + httpEntity.getBody().replace("\n", "<br>");
 		FileUtils.writeToFile("<br>" + line, "src/main/resources/static/files/logs", true);
 	}
 
